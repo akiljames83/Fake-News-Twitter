@@ -1,4 +1,6 @@
 *.edgelist
 *.ini
 *.whl
+*.png
+*.mp4
 # https://www.youtube.com/watch?v=Xg3jBz5Mp24
