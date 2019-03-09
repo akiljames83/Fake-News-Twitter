@@ -57,7 +57,7 @@ layout_kamada_kawai()
 layout_fruchterman_reingold() -- Cleaner version of kk
 layout_fruchterman_reingold(grid=True) -- TODO: Determine how to get grid to work
 '''
-layout = graph.layout_fruchterman_reingold()
+layout = graph.layout_random()
 
 color_dict = {"u": "black", "a": "red", "b": "blue"}
 
@@ -89,4 +89,7 @@ with open(file2, 'r') as f:
 		for node in line:
 			graph.vs[node_map[node]]["state"] = "a"
 		#out.save('graph_states/graph_state_{}.png'.format(num_states))
+
+num_states += 1
+graph.vs["color"] = [color_dict[state] for state in graph.vs["state"]]
 plot(graph, 'graph_states/graph_state_{:04d}.png'.format(num_states), layout = layout, bbox = (4000, 3000))
