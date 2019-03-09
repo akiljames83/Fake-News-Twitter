@@ -72,7 +72,7 @@ out.save('graph_states/graph_state_{}.png'.format(num_states))
 # Perform graph node color transition based on updated graph states in textfile
 with open(file2, 'r') as f:
 	for line in f:
-		line = [int(p) for p in line.strip().split(',') if p]
+		line = [int(p.replace(",","")) for p in line.strip().split(',') if p]
 		
 		for node in line:
 			graph.vs[node_map[node]]["state"] = "a"

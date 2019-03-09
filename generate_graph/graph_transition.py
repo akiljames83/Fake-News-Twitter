@@ -69,13 +69,13 @@ queue = Queue(maxlen=1e9)
 queue.enqueue(node_arr[0])
 
 with open(fileT, 'w') as out:
-	out.write("{}\n".format(node_map[queue.peek()]))
+	out.write("{}\n".format(node_arr[0]))
 	while queue.sizeQueue():
 		cur = queue.peek()
 		transition = ""
 		for j,i in enumerate(node_connections[cur]):
 			if i not in seen:
-				if j - 1 == len(node_connections[cur]):
+				if j + 1 == len(node_connections[cur]):
 					transition += "{}".format(node_map[i])
 				else:
 					transition += "{},".format(node_map[i])
