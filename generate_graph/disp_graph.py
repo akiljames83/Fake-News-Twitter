@@ -70,18 +70,18 @@ out = plot(graph, layout = layout, bbox = (4000, 3000))
 out.save('graph_states/graph_state_{}.png'.format(num_states))
 
 # Perform graph node color transition based on updated graph states in textfile
-# with open(file2, 'r') as f:
-# 	for line in f:
-# 		line = [int(p) for p in line.strip().split(',') if p]
+with open(file2, 'r') as f:
+	for line in f:
+		line = [int(p) for p in line.strip().split(',') if p]
 		
-# 		for node in line:
-# 			graph.vs[node_map[node]]["state"] = "a"
+		for node in line:
+			graph.vs[node_map[node]]["state"] = "a"
 
-# 		# Update graph with new states and increment state transition count
-# 		num_states += 1
-# 		graph.vs["color"] = [color_dict[state] for state in graph.vs["state"]]
+		# Update graph with new states and increment state transition count
+		num_states += 1
+		graph.vs["color"] = [color_dict[state] for state in graph.vs["state"]]
 
-# 		# Display and save images to folder
-# 		out = plot(graph, layout = layout, bbox = (4000, 3000))
-# 		out.save('graph_states/graph_state_{}.png'.format(num_states))
+		# Display and save images to folder
+		out = plot(graph, layout = layout, bbox = (4000, 3000))
+		out.save('graph_states/graph_state_{}.png'.format(num_states))
 
