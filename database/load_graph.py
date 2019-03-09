@@ -16,7 +16,7 @@ def init_graph(size, file):
 		graph = ""
 		for i, line in enumerate(f):
 			if i == size: break
-			
+
 			a, b = (int(i) for i in line.strip().split(" "))
 			if a in connections:
 				connections[a].add(b)
@@ -38,4 +38,4 @@ def reduce():
 file = "shuffle_edges.txt"
 reduce()
 shuffle(file)
-init_graph(1e3,file)
+init_graph(2e3,file)

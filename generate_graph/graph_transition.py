@@ -1,8 +1,11 @@
 from igraph import *
+from Pypeline.Pypes.Queue import Queue
 
 # Global variables for mapping of graph nodes
 count = 0
 node_map = dict()
+node_arr = list()
+node_connections = dict()
 connections = set()
 
 graph = Graph()
@@ -10,7 +13,7 @@ graph = Graph()
 # File -> The graph initial state with connections
 file1 = 'graph_rep.txt'
 # File2 -> The newly affected nodes after each iteration
-file2 = 'graph_transitions.txt'
+fileT = 'graph_transitions.txt'
 # Graph data generated
 fileD = 'graph_data.txt'
 
@@ -24,10 +27,12 @@ with open(fileD, 'r') as f:
 			
 			if node_l not in node_map:
 				node_map[node_l] = count
+				node_arr.append(node_l)
 				count += 1
 
 			if node_r not in node_map:
 				node_map[node_r] = count
+				node_arr.append(node_r)
 				count += 1
 
 			# Undirected graph representation ensured with this portion 
@@ -35,6 +40,16 @@ with open(fileD, 'r') as f:
 				min(node_map[node_l],node_map[node_r]),
 				max(node_map[node_l],node_map[node_r])
 			)
+
+			if node_l not in node_connections:
+				node_connections[node_l] = set([node_r])
+			else:
+				node_connections[node_l].add(node_r)
+
+			if node_r not in node_connections:
+				node_connections[node_r] = set([node_l])
+			else:
+				node_connections[node_r].add(node_l)
 
 			if new_connect in connections:
 				continue
@@ -48,40 +63,25 @@ with open(fileD, 'r') as f:
 
 print("Number of nodes:",count)
 
+# State transitions
+seen = set([node_arr[0]])
+queue = Queue(maxlen=1e9)
+queue.enqueue(node_arr[0])
 
-'''
-GRAPHING OPTIONS:
-layout_lgl()
-layout_random()
-layout_kamada_kawai()
-layout_fruchterman_reingold() -- Cleaner version of kk
-layout_fruchterman_reingold(grid=True) -- TODO: Determine how to get grid to work
-'''
-layout = graph.layout_fruchterman_reingold()
+with open(fileT, 'w') as out:
+	out.write("{}\n".format(node_map[queue.peek()]))
+	while queue.sizeQueue():
+		cur = queue.peek()
+		transition = ""
+		for j,i in enumerate(node_connections[cur]):
+			if i not in seen:
+				if j - 1 == len(node_connections[cur]):
+					transition += "{}".format(node_map[i])
+				else:
+					transition += "{},".format(node_map[i])
+				queue.enqueue(i)
+				seen.add(i)
+		if transition:
+			out.write(transition + "\n")
 
-color_dict = {"u": "black", "a": "red"}
-
-graph.vs["state"] = ["u" for i in range(count)]
-graph.vs["color"] = [color_dict[state] for state in graph.vs["state"]]
-
-# Initial plot
-num_states = 0
-out = plot(graph, layout = layout, bbox = (4000, 3000))
-out.save('graph_states/graph_state_{}.png'.format(num_states))
-
-# Perform graph node color transition based on updated graph states in textfile
-# with open(file2, 'r') as f:
-# 	for line in f:
-# 		line = [int(p) for p in line.strip().split(',') if p]
-		
-# 		for node in line:
-# 			graph.vs[node_map[node]]["state"] = "a"
-
-# 		# Update graph with new states and increment state transition count
-# 		num_states += 1
-# 		graph.vs["color"] = [color_dict[state] for state in graph.vs["state"]]
-
-# 		# Display and save images to folder
-# 		out = plot(graph, layout = layout, bbox = (4000, 3000))
-# 		out.save('graph_states/graph_state_{}.png'.format(num_states))
-
+		queue.dequeue()
