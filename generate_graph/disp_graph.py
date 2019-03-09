@@ -82,6 +82,7 @@ with open(file2, 'r') as f:
 		graph.vs["color"] = [color_dict[state] for state in graph.vs["state"]]
 
 		# Display and save images to folder
-		out = plot(graph, layout = layout, bbox = (4000, 3000))
-		out.save('graph_states/graph_state_{}.png'.format(num_states))
+		print("Plotting #{} ...".format(num_states))
+		plot(graph, 'graph_states/graph_state_{:04d}.png'.format(num_states), layout = layout, bbox = (4000, 3000))
+		#out.save('graph_states/graph_state_{}.png'.format(num_states))
 

@@ -76,9 +76,9 @@ with open(fileT, 'w') as out:
 		for j,i in enumerate(node_connections[cur]):
 			if i not in seen:
 				if j + 1 == len(node_connections[cur]):
-					transition += "{}".format(node_map[i])
+					transition += "{}".format(i)
 				else:
-					transition += "{},".format(node_map[i])
+					transition += "{},".format(i)
 				queue.enqueue(i)
 				seen.add(i)
 		if transition:
